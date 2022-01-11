@@ -1,6 +1,8 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const User = require('../models/User')
-const { generateUserToken } = require('../helpers/Token')
+const Token = require('../helpers/Token')
+require('dotenv').config()
 
 
 class UserController {
@@ -74,7 +76,7 @@ class UserController {
         password: hash
       })  
 
-      return await generateUserToken(user, 201, req, res)
+      return await Token.generateUserToken(user, 201, req, res)
 
     }
     catch (err) {
@@ -121,7 +123,7 @@ class UserController {
       if (!compared) return returnError()
 
 
-      generateUserToken( user, 200, req, res )
+      Token.generateUserToken( user, 200, req, res )
 
     }
     catch (err) {
@@ -130,6 +132,65 @@ class UserController {
       return res.status(500).json({ error })
     }
 
+  }
+
+
+  static async findByToken (req, res) {
+    let currentUser = null
+
+    if (req.headers.authorization) {
+      const secret = process.env.SECRET
+  
+      const token = Token.get(req)
+      
+      const decoded = jwt.verify(token, secret)
+
+      try {
+        const currentUser = await User.findById(decoded.id).select('-password')
+      }
+      catch (err) {
+        console.log(err)
+
+        return res.statu(500).json({ 
+          error: { message: 'Ocoreu um erro inesperado' }
+
+        })
+      }
+    }
+
+    res.status(200).json({ currentUser })
+
+  }
+
+
+  static async findById (req, res) {
+
+    const { id } = req.params
+
+    if ( Number(id) === NaN ) {
+      return res.status(422).json({ message: 'Usuario não encontrado' })
+    }
+
+    try{
+      const user = await User.findById(id).select('-password').lean()
+ 
+      if (!user) {
+        return res.status(422).json({ message: 'Usuario não encontrado' })
+      }
+
+      return res.status(200).json({ user })
+
+    }
+    catch (err) {
+      console.error(err)
+
+      res.status(500).json({ message: 'Ocorreu um erro na busca por este usuario' })
+    }
+  }
+
+
+  static async edit (req, res) {
+     
   }
 
 }

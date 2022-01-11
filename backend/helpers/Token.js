@@ -8,11 +8,23 @@ class Token {
     const secret = process.env.SECRET
 
     const token = jwt.sign({
-      id: user.id,
       name: user.name,
+      id: user.id,
     }, secret )
 
     return res.status(status).json({ token })
+
+  }
+
+
+  static get(req) {
+    const authHeader = req.headers.authorization
+
+    return authHeader 
+      ? authHeader.split(' ')[1]
+      : null
+
+
   }
 
 }
