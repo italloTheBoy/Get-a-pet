@@ -4,26 +4,60 @@ require('dotenv').config()
 
 class Token {
 
-  static async generateUserToken( user, status, req, res) {
+  static async generateUserToken ( user, status, req, res ) {
     const secret = process.env.SECRET
 
-    const token = jwt.sign({
-      name: user.name,
+    const payload = {
       id: user.id,
-    }, secret )
+      name: user.name,
+    }
+
+    const token = jwt.sign( payload, secret )
 
     return res.status(status).json({ token })
 
   }
 
 
-  static get(req) {
+  static get (req) {
     const authHeader = req.headers.authorization
 
     return authHeader 
       ? authHeader.split(' ')[1]
       : null
 
+
+  }
+
+
+  static check (req, res, next) {
+    
+
+    if (!req.headers.authorization) {
+      return res.status(401).json({ message: 'Acesso negado' })
+    }
+
+    
+    const token = Token.get(req)
+
+    if (!token) {
+      return res.status(401).json({ message: 'Acesso negado' })
+    }
+
+
+    const secret = process.env.SECRET
+
+    try {
+      const user = jwt.verify(token, secret)
+
+      req.userId = user.id 
+
+      next()
+    }
+    catch (err) {
+      console.error(err)
+      return res.status(422).json({ message: 'Token invalido' })
+    }
 
   }
 
