@@ -148,7 +148,7 @@ class UserController {
       const decoded = jwt.verify(token, secret)
 
       try {
-        const currentUser = await User.findById(decoded.id).select('-password')
+        currentUser = await User.findById(decoded.id).select('-password')
       }
       catch (err) {
         console.log(err)

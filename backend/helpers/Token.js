@@ -32,7 +32,6 @@ class Token {
 
   static check (req, res, next) {
     
-
     if (!req.headers.authorization) {
       return res.status(401).json({ message: 'Acesso negado' })
     }
@@ -49,6 +48,10 @@ class Token {
 
     try {
       const user = jwt.verify(token, secret)
+
+      if (!user.id || !user.name) {
+        return res.status(406).json({ message: 'Token invalido' })
+      }
 
       req.userId = user.id 
 
