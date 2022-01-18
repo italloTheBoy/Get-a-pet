@@ -4,9 +4,49 @@ const User = require('../models/User')
 
 
 class PetController {
+  
+  static async getAll(req, res) {
+    
+    try {
+      const pets = await Pet.find().sort('-createdAt')
+      
+      return res.status(200).json({ pets })
+    }
+    catch (err) {
+      console.log(err)
+
+      return res.status(500).json({ message: 'Ocorreu um erro inesperado'})
+    }
+
+  }
+
+
+  static async getMy(req, res) {
+
+    const userId = req.userId
+
+    try {
+      const user = await User.findById(userId).select('_id')
+
+      const pets = await Pet.find({ 'user._id': user._id })
+
+      res.status(200).json({ pets })
+    }
+    catch (err) {
+      console.log(err)
+
+      return res.status(500).json({ message: 'Ocorreu um erro inesperado'})
+    }
+
+  }
+
+
   static async add(req, res) {
 
-    const { name, age, weight, color, images } = req.body
+    const { name, color } = req.body
+    const age = Number(req.body.age)
+    const weight = Number(req.body.weight)
+    let images = req.files
     const userId = req.userId
     
     let error = {}
@@ -40,8 +80,12 @@ class PetController {
       error.weight = 'Insira a altura do seu pet.'
     }
 
-    if (!color || typeof color !== 'string' || color.trim() === '' ) {
-      error.color = 'Insira a cor do seu pet'
+    if ( !color || typeof color !== 'string' || color.trim() === '' ) {
+      error.color = 'Insira a cor do seu pet.'
+    }
+
+    if ( images.length === 0 ) {
+      error.images = 'Insira ao menos uma foto do seu pet.'
     }
 
 
@@ -50,11 +94,19 @@ class PetController {
     } 
 
 
+    let imagesArray = []
+
+    images.map(image => {
+      imagesArray.push(image.filename)
+    })
+
+
     const pet = await Pet.create({
-      name, 
+      name: name.trim().toLowerCase(), 
       age, 
       weight,
-      color,
+      color: color.trim().toLowerCase(),
+      images: imagesArray,
       user,
     })
 

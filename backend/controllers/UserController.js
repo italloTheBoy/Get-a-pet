@@ -70,8 +70,8 @@ class UserController {
       const hash = await bcrypt.hash(password, salt)
 
       const user = await User.create({
-        name,
-        email,
+        name: name.trim().toLowerCase(),
+        email: email.trim().toLowerCase(),
         phone,
         password: hash
       })  
@@ -265,8 +265,8 @@ class UserController {
       const hash = await bcrypt.hash(password, salt)
 
       const editedUser = await User.findByIdAndUpdate( user.id, {
-        name,
-        email,
+        name: name.trim().toLowerCase(),
+        email: email.trim().toLowerCase(),
         phone,
         password: hash
       })  

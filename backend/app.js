@@ -15,8 +15,8 @@ app.use(express.static('public'))
 app.use(express.json())
 
 
-app.use('/', userRouter)
 app.use('/pet', petRouter)
+app.use('/', userRouter)
 
 
 app.listen(port, () => {
