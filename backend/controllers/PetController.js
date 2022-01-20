@@ -152,7 +152,108 @@ class PetController {
       return res.status(500).json({ message: 'Ocorreu um erro inesperado'})
     }
  
+  
+  
   }
+
+
+  static async patch (req, res) {
+    const { name, age, weight, color } = req.body
+    const images = req.files
+    const petId = req.params.id
+    const userId = req.userId
+
+
+    if (Object.keys(req.body).length === 0  && images.length === 0) {
+      return res.status(400).json({ message: 'Dados insuficientes'})
+    }
+    else if (!name && !age && !weight && !color && images.length === 0) {
+      return res.status(400).json({ message: 'Dados insuficientes'})
+    }
+
+
+    try {
+      const user = await User.findById(userId).select('_id')
+
+      if (!user) {
+        return res.status(401).json({ message: 'Acesso negado' })
+      }
+
+
+      let error = {}
+      let pet = {}
+
+      if (name) {
+        if (typeof name !== 'string' || name.trim() === '') {
+          error.name = 'Nome invalido'
+        }
+        else {
+          pet.name = name.trim().toLowerCase()
+        }
+      }
+
+      if (weight) { 
+        if (isNaN(weight)) {
+          error.weight = 'Altura invalida'
+        }
+        else {
+          pet.weight = Number(weight)
+        }
+      }
+
+      if (age) {
+        if (isNaN(age)) {
+          error.age = 'Idade invalida'
+        }
+        else {
+          pet.age = Number(age)
+        }
+      }
+
+      if (color) {
+        if (typeof color !== 'string' || color.trim() === '') {
+          error.color = 'Cor invalida'
+        }
+        else {
+          pet.color = color.trim().toLowerCase()
+        }
+      }
+
+      if (images.length !== 0) {
+          let imagesNames = []
+  
+          images.map(image => imagesNames.push(image.filename))
+  
+          pet.images = imagesNames
+      }
+
+
+      if (Object.keys(error).length !== 0) {
+        return res.status(422).json({ error })
+      }
+
+
+      pet = await Pet.findOneAndUpdate({
+        _id: petId,
+        'user._id': user._id, 
+      }, pet)
+
+
+      if (!pet) {
+        return res.status(406).json({ message: 'O pet solicitado não existe'})
+      }
+
+      return res.status(200).json({ message: 'Pet editado'})
+
+    }
+    catch (err) {
+      console.error(err)
+
+      res.status(500).json({ message: 'Ocorreu um erro inesperado' })
+    }
+
+  }
+
 
   static async delete(req, res) {
     const userId = req.userId
