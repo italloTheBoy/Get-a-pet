@@ -255,6 +255,100 @@ class PetController {
   }
 
 
+  static async adopt (req, res) {
+    const userId = req.userId
+    const petId = req.params.id
+
+    try {
+      const user = await User.findById(userId).select('-password')
+
+      if (!user) {
+        return res.status(401).json({ message: 'Login necéssario' })
+      }
+
+      const pet = await Pet.findById(petId)
+
+      if (!pet) {
+        return res.status(406).json({ message: 'Pet não encontrado' })
+      }
+
+      if (pet.adopter) {
+        return res.status(406).json({ message: 'Esse pet ja esta em um processo de adoção' })
+      }
+
+      if (pet.user._id.equals(user._id)) {
+        return res.status(403).json({ message: 'O pet ja pertence a você' })
+      }
+
+
+      const adopter = await pet.update({
+        adopter: { 
+          _id: user._id,
+        }
+      })
+
+      if (!adopter) {
+        return res.status(500).json({ message: 'Ocorreu um erro inesperado' })
+      }
+
+
+      return res.status(200).json({ message: 'Visita agendada' })
+    }
+    catch (err) {
+      console.log(err)
+
+      throw res.status(500).json({ message: 'Ocorreu um erro inesperado'})
+    }
+  }
+
+
+  static async adoptEnd (req, res) {
+    const userId = req.userId
+    const petId = req.params.id
+
+    try {
+      const user = await User.findById(userId).select('-password')
+
+      if (!user) {
+        return res.status(401).json({ message: 'Login necéssario' })
+      }
+
+
+      const pet = await Pet.findById(petId)
+
+      if (!pet.avalibe) {
+        return res.status(400).json({ message: 'Este pet não esta disponivel' })
+      }
+
+      if (!pet) {
+        return res.status(406).json({ message: 'Pet não encontrado' })
+      }
+
+      if (!pet.user._id.equals(user._id)) {
+        return res.status(403).json({ message: 'Acesso negado.' })
+      }
+      
+
+      const avalibe = await Pet.findByIdAndUpdate(pet._id, {
+        avalibe: false
+      })
+
+      if (!avalibe) {
+        return res.status(500).json({ message: 'Ocorreu um erro inesperado'})
+      }
+
+
+      res.status(200).json({ message: 'Adoção concluida'})
+    }
+    catch (err) {
+      console.log(err)
+
+      throw res.status(500).json({ message: 'Ocorreu um erro inesperado'})
+    }
+
+  }
+
+
   static async delete(req, res) {
     const userId = req.userId
     const { id } = req.params

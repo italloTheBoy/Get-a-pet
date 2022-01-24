@@ -12,6 +12,8 @@ router.get('/my/toAdopt', check, PetController.toAdopt)
 router.get('/my/adopted', check, PetController.adopted)
 
 router.patch('/:id', check, imageUpload.array('images'), PetController.patch)
+router.patch('/adopt/conclude/:id', check, PetController.adoptEnd)
+router.patch('/adopt/:id', check, PetController.adopt)
 
 router.delete('/:id', check, PetController.delete)
 
