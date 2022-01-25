@@ -1,0 +1,42 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1em 1.5em;
+  background-color: var(--c3);
+  color: var(--c2);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 40px;
+  margin-right: 0.8em;
+}
+
+.navbar ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.navbar li, .navbar a {
+  text-decoration: none;
+  color: var(--c2);
+  cursor: pointer;
+  transition: .5s;
+  padding: .1em .2em;
+  margin-right: .2em;
+  border-radius: 5px; 
+}
+
+.navbar li:hover {
+  background-color: var(--c2);
+  color: var(--c1);
+}
+
+.navbar li:hover > a {
+  color: var(--c1);
+}
