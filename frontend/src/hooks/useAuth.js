@@ -15,7 +15,7 @@ export default function useAuth() {
     const token = localStorage.getItem('token')
 
     if (token) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(token)}`
+      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`
 
       setAuth(true)
     }
@@ -30,17 +30,45 @@ export default function useAuth() {
     navigate('/')
   }
 
+  async function logout() {
+
+    setAuth(false)
+    localStorage.removeItem('token')
+    api.defaults.headers.Authorization = undefined
+
+    navigate('/login')
+
+  }
+
+  async function login(user) {
+
+    let flashText = 'Login Realizado.'
+    let flashType = 'success'
+
+    try {
+      const data = await api.post('/login', user).then(res => res.data)
+
+      await log(data)
+    }
+    catch (err) {
+      flashText = err.response.data.error.message
+      flashType = 'error'
+    }
+    
+    setFlash(flashText, flashType)
+  }
+
   async function register(user) {
     let flashText = 'Cadastro Realizado.'
     let flashType = 'success'
 
     try{
-      const data = await api.post('/register', user).then(response => response.data)
+      const data = await api.post('/register', user).then(res => res.data)
 
       await log(data)
     }
-    catch (error) {
-      flashText = error.response.data.message
+    catch (err) {
+      flashText = err.response.data.message
       flashType = 'error'
     }
 
@@ -48,5 +76,5 @@ export default function useAuth() {
   }
 
 
-  return { register, auth }
+  return { auth, register, logout, login }
 }

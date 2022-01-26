@@ -94,7 +94,7 @@ class UserController {
 
     [email, password].forEach(field => {
       if (!field || typeof field !== 'string' || field.trim() === '') {
-        return error.message = 'Email ou senha invalidos'
+        return error.message = 'Preencha todos os campos'
       }
     })
 

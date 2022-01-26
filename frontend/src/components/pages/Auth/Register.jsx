@@ -14,7 +14,7 @@ export default function Register () {
     setUser({ ...user, [event.target.name]: event.target.value })
   }
 
-  function handleSubmit (event) {
+  function submit (event) {
     event.preventDefault()
 
     register(user)
@@ -22,7 +22,7 @@ export default function Register () {
 
   return (
     <main>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form onSubmit={submit} className={styles.form}>
         <h1>Registrar-se</h1>
 
         <Input 

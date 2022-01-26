@@ -15,9 +15,11 @@ export default function Message() {
         setMsg(msg)
         setType(type)        
 
+        let time = type === 'error' ? 5000 : 3000
+
         setTimeout(() => {
           setVisibility(false)
-        }, 10000)
+        }, time)
       })
 
     }, [])

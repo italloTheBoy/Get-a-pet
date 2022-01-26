@@ -5,8 +5,7 @@ import styles from './Navbar.module.css'
 import Logo from '../../assets/img/logo.png'
 
 function Navbar () {
-  const { auth } = useContext(Context)
-
+  const { auth, logout } = useContext(Context)
 
   return (
     <nav className={styles.navbar}>
@@ -17,12 +16,12 @@ function Navbar () {
 
       <ul className="bold">
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/">Adotar</Link>
         </li>
 
         { auth ? (
           <>
-            <p>Logado</p>
+            <li onClick={logout}>Logout</li>
           </>
         ) : (
           <>

@@ -26,7 +26,7 @@
   text-decoration: none;
   color: var(--c2);
   cursor: pointer;
-  transition: .5s;
+  transition: .2s;
   padding: .1em .2em;
   margin-right: .2em;
   border-radius: 5px; 
@@ -35,6 +35,7 @@
 .navbar li:hover {
   background-color: var(--c2);
   color: var(--c1);
+  padding: .5em;
 }
 
 .navbar li:hover > a {
