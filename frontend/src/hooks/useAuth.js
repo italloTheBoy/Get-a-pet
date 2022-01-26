@@ -11,6 +11,17 @@ export default function useAuth() {
   const navigate = useNavigate()
 
 
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+
+    if (token) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${JSON.parse(token)}`
+
+      setAuth(true)
+    }
+  }, [])
+
+
   async function log(data) {
     setAuth(true)
 
