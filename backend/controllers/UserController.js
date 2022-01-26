@@ -20,7 +20,8 @@ class UserController {
     if (!email || typeof email !== 'string' || email.trim() === '') {
       error.email = 'insira um email valido'
     }
-    if (!phone || typeof phone !== 'number') {
+
+    if (!phone || name.trim() === '' || isNaN( Number(phone) )) {
       error.phone = 'Insira um número de telefone válido'
     }
 
@@ -38,23 +39,23 @@ class UserController {
 
     try {
       const checkUser = await User.findOne({ email })
-
+      
       if (checkUser) {
         error.email = 'Email já cadastrado'
       }
-
+      
     }
     catch (err) {
       error.server = 'Erro ao cadastrar o usuário'
-
+      
       return res.status(500).json({ error })
     }
-
+    
     if (password.length < 6) {
       error.password = 'Senha muito curta'
     }
-
-
+    
+    
     if (Object.keys(error).length > 0) return res.status(422).json({ error })
 
 
@@ -72,7 +73,7 @@ class UserController {
       const user = await User.create({
         name: name.trim().toLowerCase(),
         email: email.trim().toLowerCase(),
-        phone,
+        phone: Number(phone),
         password: hash
       })  
 

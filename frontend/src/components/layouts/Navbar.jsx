@@ -6,10 +6,10 @@ import Logo from '../../assets/img/logo.png'
 function Navbar () {
   return (
     <nav className={styles.navbar}>
-      <image className={styles.logo}>
+      <div className={styles.logo}>
         <img src={Logo} alt="Get a Pet" />
         <h2>Get a Pet</h2>
-      </image>
+      </div>
 
       <ul className="bold">
         <li>
@@ -21,7 +21,7 @@ function Navbar () {
         </li>
         
         <li>
-          <Link to="/register">Register</Link>
+          <Link to="/register">Registrar-se</Link>
         </li>
       </ul>
     </nav>
