@@ -1,10 +1,10 @@
 import event from '../utils/event'
 
-export function useFlash() {
+export default function useFlash() {
 
   function setFlash(msg, type) {
     event.emit('flash', {
-      message: msg,
+      msg: msg,
       type: type,
     })
   }

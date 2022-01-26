@@ -5,6 +5,7 @@ import Navbar from './components/layouts/Navbar'
 import Home  from './components/pages/Home';
 import Login from './components/pages/Auth/Login'
 import Register from './components/pages/Auth/Register'
+import Message from './components/layouts/Message';
 import { UserProvider } from './context/UserContext';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
     <Router>
       <UserProvider>
         <Navbar />
+        <Message />
         <Container>
           <Routes>
             <Route path="/" element={<Home />} />

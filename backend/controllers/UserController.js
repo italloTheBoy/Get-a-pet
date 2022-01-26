@@ -11,58 +11,48 @@ class UserController {
 
     const { name, email, phone, password, confirmPassword } = req.body
 
-    let error = {}
 
     if (!name || typeof name !== 'string' || name.trim() === '') {
-      error.name = 'insira um nome valido'
+      return res.status(422).json({ message: 'Insira um nome valido' })
     }
+
 
     if (!email || typeof email !== 'string' || email.trim() === '') {
-      error.email = 'insira um email valido'
+      return res.status(422).json({ message: 'Insira um email valido' })
     }
-
-    if (!phone || name.trim() === '' || isNaN( Number(phone) )) {
-      error.phone = 'Insira um número de telefone válido'
-    }
-
-    if (!password || typeof password !== 'string' || password.trim() === '') {
-      error.password = 'Insira uma senha válida'
-    }
-
-    if (!confirmPassword || typeof confirmPassword !== 'string' || confirmPassword.trim() === '') {
-      error.confirmPassword = 'Insira uma confirmação de senha válida'
-    }
-
-    
-    if (Object.keys(error).length > 0) return res.status(422).json({ error })
-
 
     try {
       const checkUser = await User.findOne({ email })
       
       if (checkUser) {
-        error.email = 'Email já cadastrado'
+        return res.status(422).json({ message: 'Email já cadastrado' })
       }
       
     }
     catch (err) {
-      error.server = 'Erro ao cadastrar o usuário'
-      
-      return res.status(500).json({ error })
+      return res.status(500).json({ message: 'Erro ao cadastrar o usuário'})
     }
-    
+
+
+    if (!phone || name.trim() === '' || isNaN( Number(phone) )) {
+      return res.status(422).json({ message: 'Insira um telrfone valido' })
+    }
+
+
+    if (!password || typeof password !== 'string' || password.trim() === '') {
+      return res.status(422).json({ message: 'Insira uma senha valida' })
+    }
+
     if (password.length < 6) {
-      error.password = 'Senha muito curta'
+      return res.status(422).json({ message: 'Senha muito curta' })
+    }
+
+    if (!confirmPassword || typeof confirmPassword !== 'string' || confirmPassword.trim() === '') {
+      return res.status(422).json({ message: 'Confirme a senha' })
     }
     
-    
-    if (Object.keys(error).length > 0) return res.status(422).json({ error })
-
-
     if (password !== confirmPassword) {
-      error.confirmPassword = 'Senhas não batem'
-
-      return res.status(422).json({ error })
+      return res.status(422).json({ message: 'Senhas não batem' })
     }
 
 
@@ -83,9 +73,7 @@ class UserController {
     catch (err) {
       console.error(err)
 
-      error.server = 'Erro ao cadastrar o usuário'
-
-      return res.status(500).json({ error })
+      return res.status(500).json({ message: 'Erro ao cadastrar o usuário' })
     }
 
   }
