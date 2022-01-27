@@ -78,7 +78,6 @@ class UserController {
 
   }
 
-
   static async login (req, res) {
 
     const { email, password } = req.body
@@ -127,29 +126,29 @@ class UserController {
 
 
   static async findByToken (req, res) {
-    let currentUser = null
+    let user = null
 
     if (req.headers.authorization) {
-      const secret = process.env.SECRET
-  
-      const token = Token.get(req)
-      
-      const decoded = jwt.verify(token, secret)
-
       try {
-        currentUser = await User.findById(decoded.id).select('-password')
+        const secret = process.env.SECRET
+        const token = Token.get(req)
+
+        const decoded = await jwt.verify(token, secret)
+
+        user = await User.findById(decoded.id).select('_id image name email phone')
       }
       catch (err) {
-        console.log(err)
-
-        return res.statu(500).json({ 
-          error: { message: 'Ocoreu um erro inesperado' }
-
-        })
+        return res.status(500).json({ message: 'Ocoreu um erro inesperado' })
       }
     }
 
-    res.status(200).json({ currentUser })
+    res.status(200).json({ 
+      _id: user._id,
+      image: user.image,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+    })
 
   }
 
@@ -182,76 +181,72 @@ class UserController {
 
   static async edit (req, res) {
 
-    const user = await User.findById(req.userId).catch(err => {
-      console.error(err)
-      
+    const { name, email, phone, password } = req.body
+    const userId = req.userId
+    const id = req.params.id
+
+    let error = {}
+
+    if (id !== userId) {
+      return res.status(401).json({ message: 'Você não tem permissão para editar este usuario' })
+    }
+
+    const user = await User.findById(userId).catch(err => {
       res.status(500).json({ message: 'Ops... Ocorreu um erro inesperado' })
     })
 
 
-    if (!user) return res.status(404).json({ message: 'Usuario não encontrado'})
-    
+    if (req.file) {
+      const image = req.file.filename 
 
-    const { name, email, phone, password, confirmPassword } = req.body
+      try {
+        const user = await User.findByIdAndUpdate(userId, { image }).select('image')
+      }
+      catch (err) {
+        res.status(500).json({ message: 'Erro ao editar a imagem'})
+      }
+    }
 
-    let error = {}
-
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario não encontrado'})
+    }
 
     if (!name || typeof name !== 'string' || name.trim() === '') {
-      error.name = 'insira um nome valido'
+      return res.status(422).json({ message: 'insira um nome valido' })
     }
 
     if (!email || typeof email !== 'string' || email.trim() === '') {
-      error.email = 'insira um email valido'
+      return res.status(422).json({ message: 'insira um email valido' })
     }
-    if (!phone || typeof phone !== 'number') {
-      error.phone = 'Insira um número de telefone válido'
-    }
-
-    if (!password || typeof password !== 'string' || password.trim() === '') {
-      error.password = 'Insira uma senha válida'
-    }
-
-    if (!confirmPassword || typeof confirmPassword !== 'string' || confirmPassword.trim() === '') {
-      error.confirmPassword = 'Insira uma confirmação de senha válida'
-    }
-
-    
-    if (Object.keys(error).length > 0) return res.status(422).json({ error })
-
 
     try {
       const checkUser = await User.findOne({ email })
 
       if (checkUser && checkUser.email !== user.email) {
-        error.email = 'Email já esta em uso'
+        return res.status(422).json({ message: 'Email já esta em uso' })
       }
 
     }
     catch (err) {
-      error.server = 'Erro ao editar o usuário'
+      return res.status(500).json({ message: 'Erro ao editar o usuário' })
+    }
 
-      return res.status(500).json({ error })
+    if (!phone || name.trim() === '' || isNaN( Number(phone) )) {
+      return res.status(422).json({ message: 'Insira um número de telefone válido' })
+    }
+
+    if (!password || typeof password !== 'string' || password.trim() === '') {
+      return res.status(422).json({ message: 'Insira uma senha válida' })
     }
 
     if (password.length < 6) {
-      error.password = 'Senha muito curta'
-    }
-
-
-    if (Object.keys(error).length > 0) return res.status(422).json({ error })
-
-
-    if (password !== confirmPassword) {
-      error.confirmPassword = 'Senhas não batem'
-
-      return res.status(422).json({ error })
+      return res.status(422).json({ message: 'Senha muito curta' })
     }
 
 
     try {
       const salt = await bcrypt.genSalt(12)
-      const hash = await bcrypt.hash(password, salt)
+      const hash = await bcrypt.hash(password.trim(), salt)
 
       const editedUser = await User.findByIdAndUpdate( user.id, {
         name: name.trim().toLowerCase(),
@@ -260,20 +255,15 @@ class UserController {
         password: hash
       })  
 
-      return res.status(200).json({ message: 'Dados de usuario editado'})
-
+      return res.status(200).json({ message: 'Dados editados com sucesso' })
     }
     catch (err) {
-      console.error(err)
-
-      error.server = 'Erro ao editar o usuário'
-
-      return res.status(500).json({ error })
+      return res.status(500).json({ message: 'Erro ao editar o usuário' })
     }
 
   }
 
-
+  
   static async editImage (req, res) {
     
     if (!req.file) {

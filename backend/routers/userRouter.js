@@ -10,7 +10,7 @@ router.post('/login', UserController.login)
 router.get('/check', UserController.findByToken)
 router.get('/:id', UserController.findById)
 
-router.patch('/:id/edit', check, UserController.edit)
+router.patch('/:id/edit', check, imageUpload.single('image'), UserController.edit)
 router.patch( '/:id/edit/img', check, imageUpload.single('image'), UserController.editImage)
 
 
