@@ -71,7 +71,7 @@ export default function Profile () {
 
   return (
     <main>
-      <header>
+      <header className={styles.profileHeader}>
         <h1>Perfil</h1>
         
         {(user.image || preview) && (

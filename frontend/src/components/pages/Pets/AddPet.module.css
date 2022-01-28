@@ -1,0 +1,8 @@
+.addPet {
+   max-width: 400px;
+   margin: 0px auto 1.2em ;
+}
+
+.addPet > h1 {
+   margin-bottom: 0em;
+}

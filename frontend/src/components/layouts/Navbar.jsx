@@ -22,6 +22,10 @@ function Navbar () {
         { auth ? (
           <>
             <li>
+              <Link to="/pet/my">Meus Pets</Link>
+            </li>
+
+            <li>
               <Link to="/profile">Perfil</Link>
             </li>
 
