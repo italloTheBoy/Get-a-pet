@@ -1,9 +1,10 @@
-import { useState, useContext, useEffect } from 'react'
-import useFlash from '../../../hooks/useFlash'
 import formStyles from '../../form/Form.module.css'
 import styles from './Profile.module.css'
+import { useState, useEffect } from 'react'
+import useFlash from '../../../hooks/useFlash'
 import api from '../../../utils/api'
 import Input from '../../form/Input'
+import Img from '../../layouts/Img'
 
 
 export default function Profile () {
@@ -75,12 +76,11 @@ export default function Profile () {
         
         {(user.image || preview) && (
 
-          <img src={
+          <Img alt={user.name} src={
             preview 
             ? URL.createObjectURL(preview)
-            : `${process.env.REACT_APP_API}/img/users/${user.image}`
-          } alt={user.name} />
-
+            : `${process.env.REACT_APP_API}/img/users/${user.image}`  
+          } />
         )}
       </header>
 
