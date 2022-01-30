@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Input from './Input'
 import { Select } from './Select';
 
+
 export function PetForm({handleSubmit, petData, btnText }) {
    const [pet, setPet] = useState(petData || {})
    const [preview, setPreview] = useState([])
@@ -14,16 +15,21 @@ export function PetForm({handleSubmit, petData, btnText }) {
    }
 
    function handleFile(event) {
-
+      setPet({ ...pet, images: [...event.target.files] })
    }
 
    function handleColor (event) {
-      
+      setPet({ ...pet, color: event.target.options[event.target.selectedIndex].text })
+   }
+
+   function submit(event) {
+      event.preventDefault()
+      handleSubmit(pet)
    }
 
 
    return (
-      <form className={styles.form}>
+      <form onSubmit={submit} className={styles.form}>
          
          <Input 
             text="Fotos:" 
