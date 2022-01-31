@@ -28,7 +28,6 @@ export function PetForm({onSubmit, petData, btnText }) {
 
    function submit(event) {
       event.preventDefault()
-      console.log(pet)
       onSubmit(pet)
    }
 
@@ -89,10 +88,10 @@ export function PetForm({onSubmit, petData, btnText }) {
          />
 
          <Input 
-            text="Altura:" 
+            text="Peso:" 
             type="number" 
             name="weight" 
-            placeholder="Insira a altura do pet"
+            placeholder="Insira o peso do pet"
             value={pet.weight || ''} 
             onChange={handleChange}
          />

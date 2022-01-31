@@ -39,7 +39,7 @@ class PetController {
     }
 
     if ( !weight || typeof weight !== 'number' ) {
-      return res.status(422).json({ message: 'Insira a altura do seu pet.'})
+      return res.status(422).json({ message: 'Insira o peso do seu pet.'})
     }
 
     if ( !color || color === "undefined" || typeof color !== 'string' || color.trim() === '' ) {
@@ -190,7 +190,7 @@ class PetController {
 
       if (weight) { 
         if (isNaN(weight)) {
-          error.weight = 'Altura invalida'
+          error.weight = 'Peso invalida'
         }
         else {
           pet.weight = Number(weight)

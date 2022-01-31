@@ -1,0 +1,101 @@
+.header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin: 0 0 2em 0;
+}
+
+.header > h1 {
+   margin: 0;
+}
+
+.header > a {
+   text-decoration: none;
+   background-color: var(--c2);
+   color: var(--c1);
+   font-weight: bold;
+   cursor: pointer;
+   transition: .15   s;   
+   border: none;
+   padding: 0.5em .8em;
+   border-radius: 5px; 
+   border: 2px solid var(--c2);
+}
+
+.header > a:hover {
+   background-color: var(--c1);
+   color: var(--c2);
+}
+
+.main {
+   display: flex;
+   flex-direction: column;
+}
+
+.row {   
+   border-bottom: 1px solid var(--c2);
+   padding: 1em;
+   margin: 1em;
+   display: flex;
+   align-items: center; 
+   width: 100%;
+}
+
+.row > img {
+   margin-right: 1em;
+} 
+
+.row > p {
+   min-width: 100px;
+}
+
+.nav {
+   margin-left: auto
+}
+
+.nav > button,
+.nav > a {
+   text-decoration: none;
+   font-weight: bold;
+   font-size: 12px;
+   cursor: pointer;
+   transition: .13s;   
+   padding: 10px 15px;
+   margin-left: 1em;
+   border: none;
+   border-radius: 5px; 
+}
+
+.nav > .red {
+   background-color: var(--c1);
+   color: var(--c6);
+   border: 2px solid var(--c6);
+
+}
+
+.nav > .red:hover {
+   background-color: var(--c6);
+   color: var(--c1);
+}
+
+.nav > .green {
+   background-color: var(--c1);
+   color: var(--c5);
+   border: 2px solid var(--c5);
+}
+
+.nav > .green:hover {
+   background-color: var(--c5);
+   color: var(--c1);
+}
+
+.nav > .blue {
+   background-color: var(--c1);
+   color: var(--c2);
+   border: 2px solid var(--c2);
+}
+
+.nav > .blue:hover {   
+   background-color: var(--c2);
+   color: var(--c1);
+}
