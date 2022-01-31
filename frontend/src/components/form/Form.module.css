@@ -28,3 +28,13 @@
   font-size: 0.9em;
 }
 
+.someImg {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+.someImg > Img {
+  margin-right: 1em;
+}
+

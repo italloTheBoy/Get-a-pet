@@ -2,6 +2,7 @@ import styles from './Form.module.css';
 import { useState } from 'react';
 import Input from './Input'
 import { Select } from './Select';
+import Img from '../layouts/Img';
 
 
 export function PetForm({handleSubmit, petData, btnText }) {
@@ -14,8 +15,9 @@ export function PetForm({handleSubmit, petData, btnText }) {
       setPet({ ...pet, [event.target.name]: event.target.value })
    }
 
-   function handleFile(event) {
-      setPet({ ...pet, images: [...event.target.files] })
+   async function handleFile(event) {
+      await setPet({ ...pet, images: [...event.target.files] })
+      await setPreview(Array.from(event.target.files))
    }
 
    function handleColor (event) {
@@ -24,13 +26,40 @@ export function PetForm({handleSubmit, petData, btnText }) {
 
    function submit(event) {
       event.preventDefault()
-      handleSubmit(pet)
+      console.log(pet)
+      // handleSubmit(pet)
    }
 
 
    return (
       <form onSubmit={submit} className={styles.form}>
          
+         <article className={styles.someImg}>
+            {
+               preview.length > 0
+               ? preview.map((image, index) => (
+                  <Img
+                     src={URL.createObjectURL(image)}
+                     alt={pet.name}
+                     key={`${pet.name}+${index}`}
+                     format="square"
+                     width="100"
+                  />
+               )) 
+               : pet.images && (
+                  pet.images.map((image, index) => (
+                     <Img
+                        src={`${process.env.REACT_APP_API}/img/pets/${image}`}
+                        alt={pet.name}
+                        key={`${pet.name}+${index}`}
+                        format="square"
+                        width="100"
+                     />
+                  ))
+               )
+            }
+         </article>
+
          <Input 
             text="Fotos:" 
             type="file" 
@@ -74,7 +103,7 @@ export function PetForm({handleSubmit, petData, btnText }) {
             options={colors}
          />
 
-         <button type="submit">Cadastrar</button>
+         <button type="submit">{btnText}</button>
       </form>
    )
 }

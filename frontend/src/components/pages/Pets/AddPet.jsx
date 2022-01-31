@@ -15,7 +15,7 @@ export function AddPet() {
             <small>Ele ficará disponível para adoção</small>
          </header>
 
-         <PetForm />
+         <PetForm btnText="Cadastrar" />
       </>
    )
 }

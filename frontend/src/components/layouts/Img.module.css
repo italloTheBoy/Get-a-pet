@@ -1,10 +1,20 @@
-.rounded {
+.circle {
     width: 200px;
     width: 200px;
     border-radius: 100%;
 }
 
+.square {
+    width: 200px;
+    width: 200px;
+}
+
 .px75 {
     width: 75px;
     height: 75px;
+}
+
+.px100 {
+    width: 100px;
+    height: 100px;
 }

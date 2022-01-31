@@ -76,7 +76,7 @@ export default function Profile () {
         
         {(user.image || preview) && (
 
-          <Img alt={user.name} src={
+          <Img format="circle" alt={user.name} src={
             preview 
             ? URL.createObjectURL(preview)
             : `${process.env.REACT_APP_API}/img/users/${user.image}`  
