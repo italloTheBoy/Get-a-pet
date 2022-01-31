@@ -5,7 +5,7 @@ import { Select } from './Select';
 import Img from '../layouts/Img';
 
 
-export function PetForm({handleSubmit, petData, btnText }) {
+export function PetForm({onSubmit, petData, btnText }) {
    const [pet, setPet] = useState(petData || {})
    const [preview, setPreview] = useState([])
    const colors = ['Branco', 'Preto', 'Cinza', 'Caramelo', 'Marrom', 'Mesclado', 'Outro']
@@ -15,19 +15,21 @@ export function PetForm({handleSubmit, petData, btnText }) {
       setPet({ ...pet, [event.target.name]: event.target.value })
    }
 
-   async function handleFile(event) {
-      await setPet({ ...pet, images: [...event.target.files] })
-      await setPreview(Array.from(event.target.files))
+   function handleFile(event) {
+      setPreview(Array.from(event.target.files))
+      setPet({ ...pet, images: [...event.target.files] })
    }
 
    function handleColor (event) {
-      setPet({ ...pet, color: event.target.options[event.target.selectedIndex].text })
+      event.target.options[event.target.selectedIndex].value === 'Selecione uma cor'
+      ? setPet({ ...pet, color: undefined })
+      : setPet({ ...pet, color: event.target.options[event.target.selectedIndex].text })  
    }
 
    function submit(event) {
       event.preventDefault()
       console.log(pet)
-      // handleSubmit(pet)
+      onSubmit(pet)
    }
 
 
@@ -89,9 +91,9 @@ export function PetForm({handleSubmit, petData, btnText }) {
          <Input 
             text="Altura:" 
             type="number" 
-            name="weigth" 
+            name="weight" 
             placeholder="Insira a altura do pet"
-            value={pet.weigth || ''} 
+            value={pet.weight || ''} 
             onChange={handleChange}
          />
 

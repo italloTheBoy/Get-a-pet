@@ -18,45 +18,38 @@ class PetController {
 
     const user = await User.findById(userId).select('_id name image phone').lean()
     .then(user => {
-
       if (!user) {
         return res.status(401).json({ message: 'Login necéssario' })
       }
 
       return user
-
     })
     .catch(() => {
       console.log(err)
-      return res.status(500).json({ error: 'Ocorreu um erro inesperado' })
+      return res.status(500).json({ message: 'Ocorreu um erro inesperado' })
     })
     
 
     if ( !name || typeof name !== 'string' || name.trim() === '' ) {
-      error.name = 'Insira o nome do seu pet.'
+      return res.status(422).json({ message: 'Insira o nome do seu pet.' })
     }
 
     if ( !age || typeof age !== 'number' ) {
-      error.age = 'Insira a idade do seu pet.'
+      return res.status(422).json({ message: 'Insira a idade do seu pet.'})
     }
 
     if ( !weight || typeof weight !== 'number' ) {
-      error.weight = 'Insira a altura do seu pet.'
+      return res.status(422).json({ message: 'Insira a altura do seu pet.'})
     }
 
-    if ( !color || typeof color !== 'string' || color.trim() === '' ) {
-      error.color = 'Insira a cor do seu pet.'
+    if ( !color || color === "undefined" || typeof color !== 'string' || color.trim() === '' ) {
+      return res.status(422).json({ message: 'Insira a cor do seu pet.'})
     }
 
     if ( images.length === 0 ) {
-      error.images = 'Insira ao menos uma foto do seu pet.'
+      return res.status(422).json({ message: 'Insira ao menos uma foto do seu pet.'})
     }
-
-
-    if (Object.keys(error).length > 0) {
-      return res.status(422).json({ error })
-    } 
-
+    
 
     let imagesArray = []
 
@@ -74,7 +67,10 @@ class PetController {
       user,
     })
 
-    return res.status(201).json({ message: 'Pet registrado', pet })
+    return res.status(201).json({ 
+      message: 'Pet cadastrado com sucesso!',
+      pet,
+    })
         
   }
   
