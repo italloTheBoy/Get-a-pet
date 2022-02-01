@@ -375,10 +375,7 @@ class PetController {
 
       return res.status(500).json({ message: 'Ocorreu um erro inesperado'})
     }
-
-    
   }
-  
 }
 
 

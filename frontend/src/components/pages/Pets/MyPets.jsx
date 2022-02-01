@@ -6,9 +6,10 @@ import styles from './Dashboard.module.css'
 import api from '../../../utils/api'
 
 export function MyPets() {
-    const [token] = useState(localStorage.getItem('token'))
+    const [ token ] = useState(localStorage.getItem('token'))
     const { setFlash } = useFlash()
     const [pets, setPets] = useState([])
+
 
     useEffect(() => {
         api.get('/pet/my/toAdopt', {
@@ -19,6 +20,22 @@ export function MyPets() {
         .then(res => setPets(res.data.pets))
         
     }, [ token ])
+
+    async function deletePet(id) {
+        await api.delete(`/pet/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
+        .then(res => {
+            const noDeleted = pets.filter(pet => pet._id !== id)
+            setPets(noDeleted)
+
+            return setFlash(res.data.message, 'success')
+        })
+        .catch(err => setFlash(err.response.data.message, 'error'))
+    }
+
 
     return (
         <>
@@ -39,9 +56,22 @@ export function MyPets() {
                         <p>{pet.name}</p>
                         {pet.avalibe === true ? (
                             <nav className={styles.nav}>
-                                {pet.adopter && <button className={styles.green}>Concluir Adoção</button>}
-                                <Link to={`/pet/edit/${pet._id}`} className={styles.blue}>Editar</Link>
-                                <button className={styles.red}>Excluir</button>
+                                {
+                                    pet.adopter && (
+                                        <button className={styles.green}>Concluir Adoção</button>
+                                    )
+                                }
+
+                                <Link 
+                                    to={`/pet/edit/${pet._id}`} 
+                                    className={styles.blue}
+                                >Editar</Link>
+
+                                <button 
+                                    className={styles.red} 
+                                    onClick={() => deletePet(pet._id)}
+
+                                >Excluir</button>
                             </nav>
                         ) :
                             <button disabled>Adotado</button>
