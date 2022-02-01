@@ -10,6 +10,7 @@ import Login from './components/pages/Auth/Login'
 import Profile from './components/pages/User/Profile';
 import { MyPets } from './components/pages/Pets/MyPets';
 import { AddPet } from './components/pages/Pets/AddPet';
+import { EditPet } from './components/pages/Pets/EditPet';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/pet/my" element={<MyPets />} /> 
             <Route path="/pet/register" element={<AddPet />} />
+            <Route path="/pet/edit/:id" element={<EditPet />} />
           </Routes>
         </Container>
         <Footer />

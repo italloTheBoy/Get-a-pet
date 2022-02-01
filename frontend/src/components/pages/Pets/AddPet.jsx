@@ -19,9 +19,11 @@ export function AddPet() {
             pet.images.forEach((image, index) => {
                formData.append('images', pet[key][index])
             })
+         } 
+         else {
+            formData.append(key, pet[key])
          }
-
-         formData.append(key, pet[key]);
+         
       })
    
       await api.post('/pet', formData, {
@@ -39,7 +41,6 @@ export function AddPet() {
       })
 
    }
-
 
    return (
       <>

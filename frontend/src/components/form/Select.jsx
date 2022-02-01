@@ -11,6 +11,10 @@ export function Select({ text, name, options, value, onChange }) {
          value={value || ''} 
          onChange={onChange}
       >
+         {value
+            ? <option value={value}>{value}</option>
+            : <option>Selecione uma cor</option>
+         }
          <option>Selecione uma cor</option>
          {options.map(option => (
             <option key={option} value={option}>{option}</option>

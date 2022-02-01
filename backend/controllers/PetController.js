@@ -98,7 +98,7 @@ class PetController {
       const pet = await Pet.findById(id)
 
       if (!pet) {
-        return res.status(406).json({ message: 'Pet não encontrado' })
+        return res.status(406).json({ message: 'Não foi possível carregar os dados do pet' })
       }
 
       res.status(200).json({ pet })
@@ -109,7 +109,6 @@ class PetController {
       return res.status(500).json({ message: 'Ocorreu um erro inesperado'})
     }
   }
-
 
   static async toAdopt(req, res) {
 
@@ -129,7 +128,6 @@ class PetController {
     }
 
   }
-
 
   static async adopted(req, res) {
    
@@ -151,7 +149,6 @@ class PetController {
   
   
   }
-
 
   static async patch (req, res) {
     const { name, age, weight, color } = req.body
@@ -181,7 +178,7 @@ class PetController {
 
       if (name) {
         if (typeof name !== 'string' || name.trim() === '') {
-          error.name = 'Nome invalido'
+          return res.status(422).json({message: 'Nome invalido'})
         }
         else {
           pet.name = name.trim().toLowerCase()
@@ -190,7 +187,7 @@ class PetController {
 
       if (weight) { 
         if (isNaN(weight)) {
-          error.weight = 'Peso invalida'
+          return res.status(422).json({message: 'Peso invalida'})
         }
         else {
           pet.weight = Number(weight)
@@ -199,7 +196,7 @@ class PetController {
 
       if (age) {
         if (isNaN(age)) {
-          error.age = 'Idade invalida'
+          return res.status(422).json({message: 'Idade invalida'})
         }
         else {
           pet.age = Number(age)
@@ -208,7 +205,7 @@ class PetController {
 
       if (color) {
         if (typeof color !== 'string' || color.trim() === '') {
-          error.color = 'Cor invalida'
+          return res.status(422).json({message: 'Cor invalida'})
         }
         else {
           pet.color = color.trim().toLowerCase()
@@ -221,11 +218,6 @@ class PetController {
           images.map(image => imagesNames.push(image.filename))
   
           pet.images = imagesNames
-      }
-
-
-      if (Object.keys(error).length !== 0) {
-        return res.status(422).json({ error })
       }
 
 
@@ -249,7 +241,6 @@ class PetController {
     }
 
   }
-
 
   static async adopt (req, res) {
     const userId = req.userId
@@ -297,7 +288,6 @@ class PetController {
     }
   }
 
-
   static async adoptEnd (req, res) {
     const userId = req.userId
     const petId = req.params.id
@@ -344,7 +334,6 @@ class PetController {
 
   }
 
-
   static async delete(req, res) {
     const userId = req.userId
     const { id } = req.params
@@ -376,6 +365,7 @@ class PetController {
       return res.status(500).json({ message: 'Ocorreu um erro inesperado'})
     }
   }
+
 }
 
 
