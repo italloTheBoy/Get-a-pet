@@ -1,0 +1,47 @@
+.container {
+  text-align: center;
+}
+
+.container > header {
+  margin-bottom: 1em;
+}
+
+.container > figure {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1em;
+  max-width: 1000px;
+  margin: 0 auto; 
+}
+
+.container > figure > img {
+  margin: 1em;
+  max-height: 200px;
+
+}
+
+.container > main > p {
+  margin-bottom: 1em;
+}
+
+.container > main > button {
+  text-decoration: none;
+  background-color: var(--c4);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .15s;
+  padding: 7px 15px;
+  border-radius: 5px;
+  border: none;
+  font-size: 1.1em;
+  margin-left: 1em;
+  max-width: 200px;
+  min-width: 2.5em;
+}
+
+.container > main > button:hover {
+  background-color: var(--c5);
+}

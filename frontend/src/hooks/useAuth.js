@@ -27,7 +27,7 @@ export default function useAuth() {
 
     localStorage.setItem('token', JSON.stringify(data.token))
     
-    navigate('/')
+    navigate('/pet/my')
   }
 
   async function logout() {

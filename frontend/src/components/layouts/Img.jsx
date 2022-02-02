@@ -6,9 +6,9 @@ export default function Img({src, alt, width, format}) {
 
   return (
     <img 
-    src={src}
-    alt={alt}
-    className={`${styles[format]} ${styles[size]}`}
+      src={src}
+      alt={alt}
+      className={`${styles[format]} ${styles[size]}`}
     />
   ) 
 }

@@ -77,14 +77,14 @@ class PetController {
   static async getAll(req, res) {
     
     try {
-      const pets = await Pet.find().sort('-createdAt')
+      const pets = await Pet.find().sort('-createdAt -updatedAt')
       
       return res.status(200).json({ pets })
     }
     catch (err) {
       console.log(err)
 
-      return res.status(500).json({ message: 'Ocorreu um erro inesperado'})
+      return res.status(500).json({ message: 'Ocorreu um ao carresgar os pets' })
     }
 
   }
@@ -279,7 +279,7 @@ class PetController {
       }
 
 
-      return res.status(200).json({ message: 'Visita agendada' })
+      return res.status(200).json({ message: `Entre em contato com ${pet.user.name} pele telefone ${pet.user.phone}` })
     }
     catch (err) {
       console.log(err)
