@@ -299,7 +299,6 @@ class PetController {
         return res.status(401).json({ message: 'Login necéssario' })
       }
 
-
       const pet = await Pet.findById(petId)
 
       if (!pet.avalibe) {

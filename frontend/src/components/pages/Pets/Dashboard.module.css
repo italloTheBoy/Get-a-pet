@@ -15,7 +15,7 @@
    color: var(--c1);
    font-weight: bold;
    cursor: pointer;
-   transition: .15   s;   
+   transition: .15s;   
    border: none;
    padding: 0.5em .8em;
    border-radius: 5px; 
@@ -54,7 +54,8 @@
 }
 
 .nav > button,
-.nav > a {
+.nav > a,
+.nav > p {
    text-decoration: none;
    font-weight: bold;
    font-size: 12px;
@@ -98,4 +99,18 @@
 .nav > .blue:hover {   
    background-color: var(--c2);
    color: var(--c1);
+}
+
+.nav > .grey {
+   background-color: var(--c1);
+   color: grey;
+   border: 2px solid grey;
+}
+
+.contact {
+   margin-left: .5em;
+}
+
+.contact > p {
+   margin-top: .3em;
 }

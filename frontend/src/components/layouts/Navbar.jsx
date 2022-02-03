@@ -26,6 +26,10 @@ function Navbar () {
             </li>
 
             <li>
+              <Link to="/pet/my/adoptions">Adoçoes</Link>
+            </li>
+
+            <li>
               <Link to="/profile">Perfil</Link>
             </li>
 

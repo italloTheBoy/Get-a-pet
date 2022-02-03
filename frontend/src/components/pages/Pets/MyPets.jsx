@@ -36,6 +36,14 @@ export function MyPets() {
         .catch(err => setFlash(err.response.data.message, 'error'))
     }
 
+    async function adopt(id) {
+        api.patch(`/pet/adopt/conclude/${id}`, {
+            headers: { Authorization: `Bearer ${ JSON.parse(token) }` }
+        })
+        .then(res => setFlash(res.data.message, 'success'))
+        .catch(err => setFlash(err.response.data.message, 'error'))
+    }
+
 
     return (
         <>
@@ -56,11 +64,9 @@ export function MyPets() {
                         <p>{pet.name}</p>
                         {pet.avalibe === true ? (
                             <nav className={styles.nav}>
-                                {
-                                    pet.adopter && (
-                                        <button className={styles.green}>Concluir Adoção</button>
-                                    )
-                                }
+                                {pet.adopter && (
+                                    <button onClick={() => adopt(pet._id)} className={styles.green}>Concluir Adoção</button>
+                                )}
 
                                 <Link 
                                     to={`/pet/edit/${pet._id}`} 
@@ -73,8 +79,11 @@ export function MyPets() {
 
                                 >Excluir</button>
                             </nav>
-                        ) :
-                            <button disabled>Adotado</button>
+                        ) : (
+                            <nav className={styles.nav}>
+                                <button className={styles.grey} disabled>Adotado</button>
+                            </nav>
+                        )
                         }
                     </article>
                 ))}

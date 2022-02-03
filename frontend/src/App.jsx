@@ -9,6 +9,7 @@ import Register from './components/pages/Auth/Register'
 import Login from './components/pages/Auth/Login'
 import Profile from './components/pages/User/Profile';
 import { MyPets } from './components/pages/Pets/MyPets';
+import { MyAdoptions } from './components/pages/Pets/MyAdoptions';
 import { AddPet } from './components/pages/Pets/AddPet';
 import { EditPet } from './components/pages/Pets/EditPet';
 import { Pet } from './components/pages/Pets/Pet';
@@ -25,6 +26,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/pet/my/adoptions" element={<MyAdoptions />} /> 
             <Route path="/pet/my" element={<MyPets />} /> 
             <Route path="/pet/register" element={<AddPet />} />
             <Route path="/pet/edit/:id" element={<EditPet />} />
